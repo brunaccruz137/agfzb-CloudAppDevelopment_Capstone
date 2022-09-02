@@ -25,7 +25,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
                 <li>
-                    <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                    <a class="btn btn-link" href="">{{ user.first_name }}({{ user.username }})</a>
                     <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
                 </li>
                 {% else %}
@@ -44,49 +44,15 @@
             </ul>
         </div>
     </nav>
+    <br>
 
-    <!--Add a dealer table here -->
-    <div class="container-fluid">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-warning" role="alert">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    
-        <table class="table" id="table"
-            data-filter-control="true">
-            <thead>
-                <tr>
-                    <th data-field="id">ID</th>
-                    <th data-field="full_name">Dealer's Name</th>
-                    <th data-field="city">City</th>
-                    <th data-field="address">Address</th>
-                    <th data-field="zip">Zip</th>
-                    <th data-field="state" data-filter-control="select">State</th>
-                </tr>
-            </thead>
-             <tbody>
-                {% for dealer in dealership_list %}
-                    <tr>
-                        <td>{{dealer.id}}</td>
-                        <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
-                        <td>{{dealer.city}}</td>
-                        <td>{{dealer.address}}</td>
-                        <td>{{dealer.zip}}</td>
-                        <td>{{dealer.st}}</td>
-                    </tr>
-                {% endfor %}
-             </tbody>
-        </table>
-        </div>
-    </div>
-
+    <h1>About us</h1>
+    <img
+    src="https://images.pexels.com/photos/7012892/pexels-photo-7012892.jpeg?cs=srgb&dl=pexels-stephan-louis-7012892.jpg&fm=jpg"width="1000" height="600">
+    <h2>Welcome to Best Cars dealership! Home to the best cars Somewhere.</h2>
+    <h3>We sell domestic and imported cars at reasonable prices.</h3>
+    <h4>For over Sometime, Best Cars Dealership has grown to become the premier dealer Somewhere.</h4>
+    <h5>We offer the best possible customer service!</h5>
     </body>
-    <script>
-        $(function() {
-          $('#table').bootstrapTable()
-        })
-    </script>
-
 
 </html>
