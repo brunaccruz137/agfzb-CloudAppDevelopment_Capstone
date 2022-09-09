@@ -15,7 +15,7 @@ import json
 # - __str__ method to print a car make object
 class CarMake(models.Model):
     name = models.CharField(null=False, max_length=100, default='Make')
-    description = models.CharField(max_length=500)
+    description = models.CharField(max_length=200)
 
     def __str__(self):
         return "Name: " + self.name
@@ -33,7 +33,6 @@ class CarModel(models.Model):
     make = models.ForeignKey(CarMake, null=False, on_delete=models.CASCADE)
     id = models.IntegerField(default=1,primary_key=True)
     name = models.CharField(null=False, max_length=100, default='Car')
-   
     SEDAN = 'Sedan'
     SUV = 'SUV'
     WAGON = 'Wagon'
@@ -47,7 +46,7 @@ class CarModel(models.Model):
 
     type = models.CharField(
         null=False,
-        max_length=50,
+        max_length=10,
         choices=CAR_TYPES,
         default=SEDAN
     )
