@@ -1,42 +1,70 @@
-const Cloudant = require('@cloudant/cloudant');
-  
-const credentials = {
-    COUCH_URL: '',
-    IAM_API_KEY: ''
-}
-
 function main(params) {
-  
-  const cloudant = Cloudant({
-      url: credentials.COUCH_URL,
-      plugins: { iamauth: { iamApiKey: credentials.IAM_API_KEY } }
-  });
-  
-  const Filter = params.state !== undefined ? {
-      selector: { st: { "$eq": params.state.replace(/"/g, '') }, },
-      fields: [ "id", "city", "state", "st", "address", "zip", "lat", "long", "short_name", "full_name" ]
-  } : params.dealerId !== undefined ? {
-      selector: { id: { "$eq": parseInt(params.dealerId) } },
-      fields: [ "id", "city", "state", "st", "address", "zip", "lat", "long", "short_name", "full_name" ]
-  } : {
-      selector: { },
-      fields: [ "id", "city", "state", "st", "address", "zip", "lat", "long", "short_name", "full_name" ]
-  }
-  
-  
-  let dbListPromise = get_dealerships(cloudant, Filter);
-  
-  return dbListPromise
-}
-
-function get_dealerships(cloudant, findO) {
-  return new Promise((resolve, reject) => {
-      cloudant.use('dealerships').find(findO)
-          .then(resp => {
-              resolve({ rows: resp.docs });
-          })
-          .catch(err => {
-              reject({ err: err });
-          });
-  });   
-}
+    // console.log(params);
+    return new Promise(function (resolve, reject) {
+        const { CloudantV1 } = require('@ibm-cloud/cloudant');
+        const { IamAuthenticator } = require('ibm-cloud-sdk-core');
+        const authenticator = new IamAuthenticator({ apikey: 'MhVQajDkFqrK6_QOAvqqGxHlZ-SdkeFQFu5dCGz6vMUf' })
+        const cloudant = CloudantV1.newInstance({
+            authenticator: authenticator
+        });
+        cloudant.setServiceUrl('https://b1eff214-eeb1-49fc-b0ab-338ed2cd881b-bluemix.cloudantnosqldb.appdomain.cloud');
+        if (params.st) {
+            // return dealership with this state 
+            cloudant.postFind({db:'dealerships',selector:{st:params.st}})
+            .then((result)=>{
+              // console.log(result.result.docs);
+              let code = 200;
+              if (result.result.docs.length == 0) {
+                  code = 404;
+              }
+              resolve({
+                  statusCode: code,
+                  headers: { 'Content-Type': 'application/json' },
+                  body: result.result.docs
+              });
+            }).catch((err)=>{
+              reject(err);
+            })
+        } else if (params.id) {
+            id = parseInt(params.dealerId)
+            // return dealership with this state 
+            cloudant.postFind({
+              db: 'dealerships',
+              selector: {
+                id: parseInt(params.id)
+              }
+            })
+            .then((result)=>{
+              // console.log(result.result.docs);
+              let code = 200;
+              if (result.result.docs.length == 0) {
+                  code = 404;
+              }
+              resolve({
+                  statusCode: code,
+                  headers: { 'Content-Type': 'application/json' },
+                  body: result.result.docs
+              });
+            }).catch((err)=>{
+              reject(err);
+            })
+        } else {
+            // return all documents 
+            cloudant.postAllDocs({ db: 'dealerships', includeDocs: true, limit: 10 })            
+            .then((result)=>{
+              // console.log(result.result.rows);
+              let code = 200;
+              if (result.result.rows.length == 0) {
+                  code = 404;
+              }
+              resolve({
+                  statusCode: code,
+                  headers: { 'Content-Type': 'application/json' },
+                  body: result.result.rows
+              });
+            }).catch((err)=>{
+              reject(err);
+            })
+      }
+    }
+    )}
