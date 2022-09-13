@@ -50,7 +50,7 @@
             <hr>
             <div class="mb-3">
                 <label for="review"><b>Your review</b></label>
-                <textarea class="form-control" id="review" name="review" rows="2" required></textarea>
+                <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
                 <div class="form-check">
                 <br><input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
                 <label class="form-check-label" for="purchasecheck"><b>Did you buy from {{dealer.full_name}} ? </b><br></label>
@@ -66,9 +66,9 @@
                     </select>
                 </div>
                 <label for="purchase_date"><b>Select Your Purchase Date:</b></label><br>
-                <input type="date" class="form-control" name="purchase_date" >
+                <input type="text" class="date-own form-control" name="purchase_date" id= "purchase_date" >
                 <hr/>  <br>                 
-                <button class="btn btn-primary" type="submit" formmethod="post">Save review</button>
+                <button class="btn btn-primary" type="submit" formmethod="post">Add review</button>
             </div>
         </div>
     </form>
