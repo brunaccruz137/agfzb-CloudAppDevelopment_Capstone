@@ -33,25 +33,12 @@ class CarModel(models.Model):
     make = models.ForeignKey(CarMake, null=False, on_delete=models.CASCADE)
     id = models.IntegerField(default=1,primary_key=True)
     name = models.CharField(null=False, max_length=100, default='Car')
-    SEDAN = 'Sedan'
-    SUV = 'SUV'
-    WAGON = 'Wagon'
-    MINIVAN = 'Minivan'
-    CAR_TYPES = [
-        (SEDAN, 'Sedan'),
-        (SUV, 'SUV'),
-        (WAGON, 'Wagon'),
-        (MINIVAN, 'Minivan')
-    ]
-
-    type = models.CharField(
-        null=False,
-        max_length=10,
-        choices=CAR_TYPES,
-        default=SEDAN
-    )
-    make = models.ForeignKey(CarMake, on_delete=models.CASCADE)
     year = models.DateField(default=now)
+    SEDAN = 'Sedan'
+    SUV = 'Suv'
+    HATCHBACK = "Hatchback"
+    type = models.CharField(max_length=10, choices=((SEDAN, 'Sedan',), (SUV, 'Suv'), (HATCHBACK, 'Hatchback')))
+    
 
     def __str__(self):
         return "Name: " + self.name
@@ -73,7 +60,6 @@ class CarDealer:
         self.lat = lat
         # Location long
         self.long = long
-
         # Dealer state
         self.st = st
         # Dealer zip
@@ -101,23 +87,6 @@ class DealerReview:
 
     def __str__(self):
         return "Review: " + self.review
-
-    def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                            sort_keys=True, indent=4)
-
-
-class ReviewPost:
-
-    def __init__(self, dealership, name, purchase, review):
-        self.dealership = dealership
-        self.name = name
-        self.purchase = purchase
-        self.review = review
-        self.purchase_date = ""
-        self.car_make = ""
-        self.car_model = ""
-        self.car_year = ""
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
