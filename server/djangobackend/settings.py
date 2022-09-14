@@ -27,7 +27,10 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = [
+"localhost", 
+"dealershipapp.us-east.cf.appdomain.cloud",
+"dealershipapp.us-east.cf.appdomain.cloud/static"]
 
 
 # Application definition
