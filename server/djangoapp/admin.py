@@ -5,9 +5,10 @@ from .models import CarMake, CarModel
 # Register your models here.
 class CarModelInline(admin.StackedInline):
     model = CarModel
-    extra = 2
+
 # CarModelInline class
 class CarModelAdmin(admin.ModelAdmin):
+    list_display = ('name',)
 
     
 

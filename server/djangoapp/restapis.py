@@ -66,7 +66,7 @@ def get_dealers_from_cf(url):
 def get_dealer_by_id_from_cf(url, id):
     json_result = get_request(url, id=id)
     if json_result:
-        dealer_doc = json_result["body"][0]
+        dealer_doc = json_result[0]
         dealer_obj = CarDealer(
             address=dealer_doc["address"],
             city=dealer_doc["city"],
@@ -74,7 +74,6 @@ def get_dealer_by_id_from_cf(url, id):
             id=dealer_doc["id"],
             lat=dealer_doc["lat"],
             long=dealer_doc["long"],
-            short_name=dealer_doc["short_name"],
             st=dealer_doc["st"],
             zip=dealer_doc["zip"]
         )
@@ -103,14 +102,17 @@ def get_dealers_by_st_from_cf(url, state):
 def get_dealer_reviews_from_cf(url, **kwargs):
     results = []
     id = kwargs.get("id")
+    dealership = kwargs.get("dealership")
+
     if id:
         json_result = get_request(url, id=id)
+    elif dealership:
+        json_result = get_request(url, dealership=dealership)
     else:
         json_result = get_request(url)
  
     if json_result:
-        reviews = json_result["body"]["data"]["docs"]
-
+        reviews = json_result["data"]["docs"]
         for dealer_review in reviews:
             
             review_obj = DealerReview(dealership=dealer_review["dealership"],
