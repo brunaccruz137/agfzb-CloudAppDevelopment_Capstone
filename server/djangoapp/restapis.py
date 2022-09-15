@@ -1,3 +1,4 @@
+from logging import raiseExceptions
 import requests
 import json
 from .models import CarDealer, DealerReview
@@ -148,3 +149,4 @@ def analyze_review_sentiments(text):
     label = response['sentiment']['document']['label']
     
     return(label)
+    
